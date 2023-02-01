@@ -1,0 +1,56 @@
+<!-- In HTML Comments are written like this -->
+<!-- They can all be removed for your apps -->
+<!doctype html> <!-- This first line tells browsers to expect modern standard html 5 -->
+<html lang="en-gb"> <!-- This is indicates the page is written in British English, useful for accessibility -->
+<meta charset="utf-8"> <!-- This indicates how the file is encoded. utf-8 is standard -->
+<title>DOTS AND BOXES</title> <!-- All pages need a title, this will be displayed in the browser's title bar -->
+<link rel="stylesheet" href="default.css"> <!-- Import style sheet – default.css -->
+<link rel="icon" href="./assets/favicon.png"> <!-- Import 'Favorites Icon' – favicon.png -->
+<script type="module" src="main.js"></script> <!-- Load the main script. Must be type="module". Have only one of these -->
+
+<header>
+    <div id = "title" >DOTS AND BOXES</div>
+</header>
+
+<main>
+    <div id = "grid" class = "grid"></div>
+</main>
+
+<aside>
+    <h2 id = "STATS">STATS</h2>
+    <div id = "stats">
+        <div class = "stat">Total Boxes: <span id = "total boxes">0</span> boxes</div>
+        <div class = "stat" >Boxes Left: <span id = "boxes left">0</span> boxes</div>
+        <div class = "stat" >Player 1: <span id = "player 1">0</span> boxes won</div>
+        <div class = "stat" >Player 2: <span id = "player 2">0</span> boxes won</div>
+        <div class = "stat" >Winning Player: <span id = "winning player">draw</span></div>
+    </div>
+    <button id = "instructions button">INSTRUCTIONS</button>
+    <button id = "restart1">RESTART</button>
+</aside>    
+
+<footer id = "footer">
+    <div id = "turn" >Player <span id = "player no">1</span>'s Turn</div>
+    <div id = "coordinates"></div>
+</footer>
+
+<dialog id = "instructions">
+    <h2 class = "black">INSTRUCTIONS</h2>
+    <div>
+    - Take it in turns to draw lines between dots by clicking on the grey line spaces in the grid.<br>
+    - If you close a square, you win that box and it will be filled with your colour.<br>
+    - If you close a box, you get another turn.<br>
+    - The game ends when all possible boxes are won.<br>
+    - The player with the highest score wins.<br>
+    </div>
+    <button id = "exit1">EXIT</button>
+</dialog>
+
+<dialog id="result_dialog" tabindex="0" aria-label="Game over message">
+    <h2 class = "black">GAME OVER</h2>
+    <h3 id="result_winner"></h3>
+    <div id = "buttons">
+        <button id = "restart2">RESTART</button>
+        <button id = "exit2">EXIT</button>
+    </div>
+</dialog>

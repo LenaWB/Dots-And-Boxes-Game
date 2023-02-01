@@ -1,0 +1,279 @@
+:root
+{
+    --grid-columns: 5; /* these values are the default but can be overwritten by the javascript */
+    --grid-rows: 5;
+    --grid-aspect: var(--grid-columns)/var(--grid-rows); /* sets the grid aspect according to the number of rows and columns */
+    /* --dots-rows: calc((var(--grid-rows)+1)/2);
+    --boxes-rows: calc(var(--grid-rows) - var(--dots-rows));
+    --dots-columns: calc((var(--grid-columns)+1)/2);
+    --boxes-columns: calc(var(--grid-columns) - var(--dots-columns)); */
+
+    --header-colour:#141B41;
+    --aside-colour:#6ca1da;
+    --main-colour:#b6e3ff;
+    --text-colour: white;
+    --blank-line-colour: rgb(220, 220, 220);
+    --line-colour: #306BAC;
+    --player1-colour: #fd7bbc;
+    --player2-colour: #c681ff;
+    --dot-colour: black;
+    --box-colour: white;
+
+    --header-height: 60px;
+    --aside-width: clamp(180px, 25%, 300px);
+	--footer-height: 60px;
+}
+
+*
+{
+    box-sizing: border-box;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+header
+{
+    position: absolute;
+    background: var(--header-colour);
+    top: 0px;
+    left: 0px;
+    padding: 10px;
+    height: var(--header-height);
+    width: 100%;
+    color: var(--text-colour);
+    font-size: xx-large;
+}
+
+#title
+{
+    width: max-content; 
+    margin-top: 0 auto;
+	margin-left: auto; 
+	margin-right: auto;
+	padding: 0;
+	position: relative;
+    /* background: #f08; */
+    letter-spacing: 20px;
+}
+
+aside
+{
+    position: absolute;
+    background: var(--aside-colour);
+    top: var(--header-height);
+    left: 0px;
+    padding: 20px;
+    height: calc(100% - var(--header-height) - var(--footer-height));
+    width: var(--aside-width);
+}
+
+h2
+{
+    width: max-content; 
+	margin-left: auto; 
+	margin-right: auto;
+	padding: 0;
+	position: relative;
+    letter-spacing: 10px;
+    font-size: larger;
+    color: var(--text-colour);
+}
+
+h3
+{
+    width: max-content; 
+	margin-left: auto; 
+	margin-right: auto;
+	padding: 0;
+	position: relative;
+    font-size: large;
+    color: var(--line-colour)
+}
+
+#STATS {
+    color: var(--text-colour);
+}
+
+#stats
+{
+    margin-top: 20px;
+}  
+
+.stat
+{
+    color: var(--text-colour);
+    margin: 10px
+}
+
+.black {
+    color: black;
+}
+
+main
+{
+    position: absolute;
+    background: var(--main-colour);
+    left: var(--aside-width);
+    top: var(--header-height);
+    width: calc(100% - var(--aside-width));
+    height: calc(100% - var(--header-height) - var(--footer-height));
+    padding: 10px;
+}
+
+.grid
+{
+    aspect-ratio: var(--grid-aspect);
+	margin: 0;
+	margin-left: auto; /* this centres the grid on the page */
+	margin-right: auto;
+	padding: 0;
+	position: relative;
+	max-width: 100%;
+	max-height: 100%; /* setting the max height and width to be 100% will means it will always be as big as possible */
+	background: var(--main-colour);
+}
+
+.row
+{
+	/* height: calc(100% / var(--grid-rows)); */
+	position: relative;
+	padding: 0;
+	margin: 0;
+	width: 100%
+}
+
+.row:nth-child(odd) {
+    height: calc(60% / var(--grid-rows));
+}
+
+.row:nth-child(even) {
+    height: calc(160% / var(--grid-rows));
+}
+
+/*flexbox
+/* .row:nth-child(odd) {
+    height: 100% / var(--dots-rows);
+} 
+
+.row:nth-child(even) {
+    height: 150% / var(--boxes-rows);
+} */
+
+.cell
+{
+	/* background-color: rgb(254, 255, 253); */
+	/* border: 1px solid black; */
+	display: inline-block;
+	height: 100%;
+	margin: 0;
+    /* margin-left: auto;
+    margin-right: auto; */
+	padding: 0;
+	position: relative;
+	width: calc(100% / var(--grid-columns));
+}
+
+.cell:nth-child(odd) {
+    width: calc(60% / var(--grid-columns));
+}
+
+.cell:nth-child(even) {
+    width: calc(160% / var(--grid-columns));
+}
+
+/* .cell:nth-child(odd) {
+    width: calc(30% / var(--dots-columns));
+}
+
+.cell:nth-child(even) {
+    width: calc(70% / var(--boxes-columns));
+} */
+
+.cell.dot {
+    background: var(--dot-colour);
+}
+
+.cell.line {
+    background: var(--blank-line-colour);
+}
+
+.cell.line.on {
+    background: var(--line-colour);
+}
+
+.cell.box {
+    background: var(--box-colour);
+}
+
+.cell.player1 {
+    background: var(--player1-colour);
+}
+
+.cell.player2 {
+    background: var(--player2-colour);
+}
+
+footer
+{
+    position: absolute;
+    background: var(--player1-colour);
+    bottom: 0px;
+    left: 0px;
+    height: var(--footer-height);
+    width: 100%;
+    padding: 12px;
+}
+
+footer.player1 {
+    background: var(--player1-colour);
+}
+
+footer.player2 {
+    background: var(--player2-colour);
+}
+
+#turn
+{
+    width: var(--aside-width); 
+    height: max-content;
+    width: max-content;
+	padding: 0;
+    margin-left: 20px;
+	position: relative;
+    letter-spacing: 8px;
+    font-size: larger;
+    color: var(--text-colour);
+}
+
+#coordinates
+{
+    margin-right: 20px;
+    color: var(--text-colour);
+    position: relative;
+    text-align: right;
+}
+
+#buttons {
+    width: max-content; 
+	margin-left: auto; 
+	margin-right: auto;
+	padding: 0;
+	position: relative;
+}
+
+button {
+    margin: 10px;
+    color: black;
+    background-color:var(--main-colour);
+    border: 0px;
+    padding: 5px;
+}
+
+button:hover {
+    background-color:var(--line-colour);
+    color: var(--text-colour);
+}
+
+button:active {
+    background-color: var(--header-colour);
+    color: var(--text-colour);
+}
