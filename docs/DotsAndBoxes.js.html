@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+    <meta charset="utf-8">
+    <title>DotsAndBoxes.js - Documentation</title>
+    
+    
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc.css">
+    <script src="scripts/nav.js" defer></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav >
+    
+    <h2><a href="index.html">Home</a></h2><h3>Namespaces</h3><ul><li><a href="DotsAndBoxes.html">DotsAndBoxes</a><ul class='methods'><li data-type='method'><a href="DotsAndBoxes.html#.boxes_left">boxes_left</a></li><li data-type='method'><a href="DotsAndBoxes.html#.close_box">close_box</a></li><li data-type='method'><a href="DotsAndBoxes.html#.how_many_char_in_board">how_many_char_in_board</a></li><li data-type='method'><a href="DotsAndBoxes.html#.is_ended">is_ended</a></li><li data-type='method'><a href="DotsAndBoxes.html#.is_new_box_created_on_board">is_new_box_created_on_board</a></li><li data-type='method'><a href="DotsAndBoxes.html#.is_won_for_player">is_won_for_player</a></li><li data-type='method'><a href="DotsAndBoxes.html#.max_boxes">max_boxes</a></li><li data-type='method'><a href="DotsAndBoxes.html#.new_boxes_created">new_boxes_created</a></li><li data-type='method'><a href="DotsAndBoxes.html#.place_line">place_line</a></li><li data-type='method'><a href="DotsAndBoxes.html#.play_for_player">play_for_player</a></li><li data-type='method'><a href="DotsAndBoxes.html#.player_boxes">player_boxes</a></li><li data-type='method'><a href="DotsAndBoxes.html#.spaces_left">spaces_left</a></li><li data-type='method'><a href="DotsAndBoxes.html#.starting_board">starting_board</a></li><li data-type='method'><a href="DotsAndBoxes.html#.who_is_winning">who_is_winning</a></li></ul></li></ul>
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">DotsAndBoxes.js</h1>
+    
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import R from "../common/ramda.js";
+
+
+/**
+ * DotsAndBoxes.js is a module to model and play "Dots and Boxes" and related games.
+ * https://en.wikipedia.org/wiki/Dots_and_Boxes
+ * @namespace DotsAndBoxes
+ * @author Lena Westerburg Burr
+ * @version 2021/22
+ */
+ const DotsAndBoxes = Object.create(null);
+
+DotsAndBoxes.board_of_dots = function (w, h) {
+    const board = Array(2*h-1).fill(Array(2*w-1).fill("."));
+    return board;
+};
+
+DotsAndBoxes.create_empty_rows = function (board) {
+    const new_board = board.map(function(row, row_index) {
+        if (row_index % 2 !== 0){
+            const new_row = Array(row.length).fill(0);
+            return new_row;
+        } else {
+            return row;
+        }
+    });
+    return new_board;
+};
+
+DotsAndBoxes.create_empty_columns = function (board) {
+    const new_board = board.map(function (row, row_index){
+        const new_row = row.map(function(column, column_index){
+            if (column_index % 2 !== 0){
+                const new_column = 0;
+                return new_column;
+            } else {
+                return column;
+            }
+        });
+        return new_row;
+    });
+    return new_board;
+};
+
+DotsAndBoxes.create_box_middles = function (board) {
+    const new_board = board.map(function (row, row_index){
+        const new_row = row.map(function(column, column_index){
+            if (column_index % 2 !== 0 &amp;&amp; row_index % 2 !== 0){
+                const new_column = "X";
+                return new_column;
+            } else {
+                return column;
+            }
+        });
+        return new_row;
+    });
+    return new_board;
+};
+/**
+ * Create a new empty board.
+ * A Board is an rectangular grid of dots with spaces that can be filled with lines.
+ * Lines can be placed either horizontally or vertically to connect dots.
+ * It is implemented as an array of rows
+ * Optionally with a specified width and height,
+ * otherwise returns a standard 3 dots wide, 3 dots high board.
+ * @memberof DotsAndBoxes
+ * @function
+ * @param {number} [width = 3] The number of dots that make up the width of the new board.
+ * @param {number} [height = 3] The number of dots that make up th height of the new board.
+ * @returns {DotsAndBoxes.Board} StartBoard
+ */
+
+DotsAndBoxes.starting_board = R.pipe(
+    DotsAndBoxes.board_of_dots,
+    DotsAndBoxes.create_empty_rows,
+    DotsAndBoxes.create_empty_columns,
+    DotsAndBoxes.create_box_middles
+);
+/**
+ * Return a new board after a player places a line in a specified row and column.
+ * @memberof DotsAndBoxes
+ * @function
+ * @param {number} column_index The column the player adds the line to
+ * @param {number} row_index The row the player adds the line to
+ * @param {DotsAndBoxes.Board} board The board state that the ply is made on.
+ * @returns {(DotsAndBoxes.Board | undefined)} If the ply was legal,
+ *   return the new board, otherwise return `undefined`.
+ */
+DotsAndBoxes.place_line = function (row_index, column_index, board) {
+    const new_board = board;
+    if (board[row_index][column_index] === 0){
+        new_board[row_index][column_index] = "/";
+        return new_board;
+    } else {
+        return new_board;
+    }
+};
+
+/**
+ * Scans the board for new boxes that could have been created from a new line
+ * Returns a two dimensional array describing the coordinates of the centres of each of the new boxes
+ * @param {DotsAndBoxes.Board} board the board state to check
+ * @returns {Array} new_boxes, an array describing the coordinates of the centres of each of the new boxes created. [[row1,col1],[row2,col2], ...]
+ */
+DotsAndBoxes.new_boxes_created = function (board){
+    const new_boxes = [];
+    board.forEach((row, row_index, board_array) => row.forEach((element, col_index) => {
+        if (element === "X"){
+            if (board_array[row_index-1][col_index] === "/"
+            &amp;&amp; board_array[row_index+1][col_index] === "/"
+            &amp;&amp; board_array[row_index][col_index-1] === "/"
+            &amp;&amp; board_array[row_index][col_index+1] === "/") {
+                new_boxes.push([row_index, col_index]);
+            }
+        }
+    }));
+    return new_boxes;
+};
+
+/**
+ * Returns whether a new box has been created as a result of the ply just made
+ * Used to determine whether the player gets another go or not
+ * @param {DotsAndBoxes.Board} board the board to check
+ * @returns {boolean} whether or not a new box (or mulptiple new boxes) has been created
+ */
+DotsAndBoxes.is_new_box_created_on_board = function (board){
+    if (DotsAndBoxes.new_boxes_created(board).length > 0){
+        return true;
+    } else {
+        return false;
+    }
+};
+
+/**
+ * This function places the player number in the centre of any newly created box by that player
+ * @param {(1 | 2)} player the player that closed the box i.e. the player whose go it last was
+ * @param {Array} array_of_new_boxes array that describes the coordinates of the new boxes created
+ * @param {DotsAndBoxes.Board} board the current board state
+ * @returns {DotsAndBoxes.Board} an updated version of the board with all closed boxes assigned to a particular player
+ */
+DotsAndBoxes.close_box = function(player, array_of_new_boxes, board) {
+    const new_board = board;
+    array_of_new_boxes.forEach((box) => {
+        new_board[box[0]][box[1]] = player;
+    });
+    return new_board;
+};
+
+/**
+ * This function governs everything that happens in one play for a player and returns the updated board
+ * It updates the board such that the line from the play is drawn in and any boxes that were closed with this play are indicated
+ * @param {(1 | 2)} player indicates which player is making this play
+ * @param {number} row_index the row the player adds a line to
+ * @param {number} column_index the column the player adds a line to
+ * @param {DotsAndBoxes.Board} board the current board state
+ * @returns the updated board after the play
+ */
+
+DotsAndBoxes.play_for_player = function(player, row_index, column_index, board){
+    let new_board = DotsAndBoxes.place_line(row_index, column_index, board);
+    if (DotsAndBoxes.is_new_box_created_on_board(board)){
+        new_board = DotsAndBoxes.close_box(player, DotsAndBoxes.new_boxes_created(board), new_board);
+    }
+    return new_board;
+};
+
+/**
+ * This function returns how many instances there are of a given character in the board array
+ * @param {string} char the character to count instances of
+ * @param {DotsAndBoxes.board} board the board to check
+ * @returns {number} The number of times the given character appears in the board array
+ */
+DotsAndBoxes.how_many_char_in_board = function (char, board){
+    let no_chars = 0;
+    board.forEach(function(row){
+        row.forEach(function(column){
+            if (column === char){
+                no_chars = no_chars + 1;
+            }
+        });
+    });
+    return no_chars;
+};
+
+/**
+ * Returns the number of spaces that are still available for a line to be placed
+ * @memberof DotsAndBoxes
+ * @function
+ * @param {DotsAndBoxes.Board} board The board to test.
+ * @returns {number} The number of spaces/moves left
+ */
+DotsAndBoxes.spaces_left = function(board){
+    return DotsAndBoxes.how_many_char_in_board(0, board);
+};
+
+/**
+ * Returns the number of boxes that are still available to be won
+ * @memberof DotsAndBoxes
+ * @function
+ * @param {DotsAndBoxes.Board} board The board to test.
+ * @returns {number} The number of boxes left
+ */
+ DotsAndBoxes.boxes_left = function(board){
+    return DotsAndBoxes.how_many_char_in_board("X", board);
+};
+
+/**
+ * Returns if a game has ended.
+ * Since Dots and Boxes is an impartial game it ends only when there are no more legal moves.
+ * @memberof DotsAndBoxes
+ * @function
+ * @param {DotsAndBoxes.Board} board The board to test.
+ * @returns {boolean} Whether the game has ended
+ */
+DotsAndBoxes.is_ended = function (board){
+    if (DotsAndBoxes.spaces_left(board) === 0){
+        return true;
+    } else {
+        return false;
+    }
+};
+
+/**
+ * Returns the maximum number of boxes that can be created on a given board
+ * @param {DotsAndBoxes.Board} board uses dimensions of board to calculate
+ * @returns {number} the total number of boxes on the board
+ */
+DotsAndBoxes.max_boxes = function (board){
+    const height_in_dots = (board.length+1)/2;
+    const width_in_dots = (board[0].length+1)/2;
+    const no_boxes_x = width_in_dots - 1;
+    const no_boxes_y = height_in_dots - 1;
+    return no_boxes_x*no_boxes_y;
+};
+
+/**
+ * Returns how many boxes a given player has won
+ * @param {(1 | 2)} player which player to check boxes for
+ * @param {DotsAndBoxes.Board} board the board to check
+ * @returns {number} the number of boxes specified player has won
+ */
+DotsAndBoxes.player_boxes = function (player, board) {
+    return DotsAndBoxes.how_many_char_in_board(player, board);   // !! IS THIS WEIRD TO DO?
+};
+
+/**
+ * Returns whether a specified player has won the game.
+ * @memberof DotsAndBoxes
+ * @function
+ * @param {DotsAndBoxes.Board} board
+ * @param {(1 | 2)} player Which player to check has a win.
+ * @returns {boolean} Whether the specified player has won
+ */
+DotsAndBoxes.is_won_for_player = function(player, board){  // DO I NEED THIS FUNCTION AS WELL AS THE ONE BELOW?
+    return DotsAndBoxes.player_boxes(player) > DotsAndBoxes.max_boxes(board)/2;
+};
+
+/**
+ * Returns which player won the game or whether it was a draw
+ * @param {DotsAndBoxes.Board} board the board to check
+ * @returns {(1|2|"draw")}
+ */
+DotsAndBoxes.who_is_winning = function(p1_count, p2_count){
+    if (p1_count > p2_count){
+        return 1;
+    } else if (p2_count > p1_count){
+        return 2;
+    } else{
+        return "draw";
+    }
+};
+
+export default Object.freeze(DotsAndBoxes);</code></pre>
+        </article>
+    </section>
+
+
+
+
+    
+    
+</div>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.10</a> on Fri Jul 01 2022 14:59:43 GMT+0100 (British Summer Time) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/polyfill.js"></script>
+<script src="scripts/linenumber.js"></script>
+
+
+
+</body>
+</html>
